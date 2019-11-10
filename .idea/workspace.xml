@@ -2,11 +2,14 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="26828ffa-c594-4238-b717-b03bee491bf5" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/org/alniss/skyloc/ImageFrame.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/org/alniss/skyloc/ImageTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/org/alniss/skyloc/ImageComponent.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/org/alniss/skyloc/MiscUtils.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/org/alniss/skyloc/ImagePanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/alniss/skyloc/ImagePanel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/alniss/skyloc/ImageFrame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/alniss/skyloc/ImageFrame.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/alniss/skyloc/ImagePanel.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/alniss/skyloc/ImageTest.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/org/alniss/skyloc/InversePerspectiveTransform.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/alniss/skyloc/InversePerspectiveTransform.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/alniss/skyloc/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/alniss/skyloc/Main.java" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -45,20 +48,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Application.ImageTest">
-    <configuration name="ImageTest" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="org.alniss.skyloc.ImageTest" />
-      <module name="skyloc" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="org.alniss.skyloc.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
+  <component name="RunManager">
     <configuration name="Main" type="Application" factoryName="Application" temporary="true">
       <option name="MAIN_CLASS_NAME" value="org.alniss.skyloc.Main" />
       <module name="skyloc" />
@@ -71,7 +61,6 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.ImageTest" />
         <item itemvalue="Application.Main" />
       </list>
     </recent_temporary>
@@ -94,7 +83,9 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="COLUMN_ORDER" />
+            </State>
           </value>
         </entry>
       </map>
