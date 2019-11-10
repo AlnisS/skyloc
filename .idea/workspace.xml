@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="26828ffa-c594-4238-b717-b03bee491bf5" name="Default Changelist" comment="" />
+    <list default="true" id="26828ffa-c594-4238-b717-b03bee491bf5" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/org/alniss/skyloc/ImageFrame.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/org/alniss/skyloc/ImageTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/alniss/skyloc/ImagePanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/alniss/skyloc/ImagePanel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/alniss/skyloc/InversePerspectiveTransform.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/alniss/skyloc/InversePerspectiveTransform.java" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -15,7 +21,11 @@
       </list>
     </option>
   </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
   <component name="ProjectId" id="1TPqq0GFHBjPgMCCTolwFLGt2gF" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="PropertiesComponent">
     <property name="last_opened_file_path" value="$PROJECT_DIR$/libs" />
     <property name="project.structure.last.edited" value="Modules" />
@@ -35,7 +45,20 @@
       </list>
     </option>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Application.ImageTest">
+    <configuration name="ImageTest" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="org.alniss.skyloc.ImageTest" />
+      <module name="skyloc" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="org.alniss.skyloc.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="Main" type="Application" factoryName="Application" temporary="true">
       <option name="MAIN_CLASS_NAME" value="org.alniss.skyloc.Main" />
       <module name="skyloc" />
@@ -48,6 +71,7 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.ImageTest" />
         <item itemvalue="Application.Main" />
       </list>
     </recent_temporary>
@@ -64,5 +88,16 @@
       <updated>1573372264212</updated>
     </task>
     <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
 </project>

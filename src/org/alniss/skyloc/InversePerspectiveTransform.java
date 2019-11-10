@@ -3,7 +3,6 @@ package org.alniss.skyloc;
 import org.opencv.calib3d.Calib3d;
 import org.opencv.core.*;
 import org.opencv.core.Point;
-import org.opencv.imgcodecs.Imgcodecs;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -54,7 +53,7 @@ public class InversePerspectiveTransform {
     }
 
     public static void saveMat(Mat mat) {
-        Image image = ImagePanel.toBufferedImage(mat);
+        Image image = ImagePanel.toImage(mat);
         try {
             ImageIO.write(toBufferedImage(image), "png", new File(System.getProperty("user.dir") + "/data/out.png"));
         } catch (IOException e) {

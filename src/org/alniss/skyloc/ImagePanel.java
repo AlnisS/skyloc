@@ -6,8 +6,6 @@ import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
 import java.io.File;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
@@ -16,7 +14,7 @@ public class ImagePanel extends JPanel{
     private BufferedImage image;
 
     public ImagePanel(Mat mat) {
-        this(toBufferedImage(mat));
+        this(toImage(mat));
     }
 
     public ImagePanel(Image image) {
@@ -38,7 +36,7 @@ public class ImagePanel extends JPanel{
     }
 
 
-    public static Image toBufferedImage(Mat m){
+    public static Image toImage(Mat m){
         int type = BufferedImage.TYPE_BYTE_GRAY;
         if ( m.channels() > 1 ) {
             type = BufferedImage.TYPE_3BYTE_BGR;
