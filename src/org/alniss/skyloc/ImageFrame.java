@@ -10,8 +10,7 @@ class ImageFrame extends JFrame {
     ImageFrame(){
         setTitle("ImageTest");
         setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
-
-        Image image = MiscUtils.matToImage(InversePerspectiveTransform.inversePerspectiveTransform());
+        Image image = MiscUtils.matToImage(InversePerspectiveTransform.bookTransform());
         ImageComponent component = new ImageComponent(image);
         add(component);
     }
