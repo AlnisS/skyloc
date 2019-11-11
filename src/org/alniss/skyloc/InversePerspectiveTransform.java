@@ -34,9 +34,11 @@ public class InversePerspectiveTransform {
     }
 
     static Mat inversePerspectiveTransform(Mat im_src, Mat im_dst, MatOfPoint2f pts_src, MatOfPoint2f pts_dst) {
+        long startTime = System.currentTimeMillis();
         Mat h = Calib3d.findHomography(pts_src, pts_dst);
         Mat im_out = new Mat();
         warpPerspective(im_src, im_out, h, im_dst.size());
+        System.out.println(System.currentTimeMillis() - startTime);
         return im_out;
     }
 
