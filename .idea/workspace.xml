@@ -5,6 +5,7 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/org/alniss/skyloc/ImageFrame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/alniss/skyloc/ImageFrame.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/org/alniss/skyloc/InversePerspectiveTransform.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/alniss/skyloc/InversePerspectiveTransform.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/alniss/skyloc/MiscUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/alniss/skyloc/MiscUtils.java" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />

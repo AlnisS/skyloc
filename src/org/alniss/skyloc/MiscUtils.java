@@ -29,6 +29,15 @@ class MiscUtils {
         }
     }
 
+    static void saveMat(Mat mat, String formatName, String fileName) {
+        try {
+            ImageIO.write(imageToBufferedImage(matToImage(mat)),
+                    formatName, dataFile(fileName));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     static Mat bufferedImageToMat(BufferedImage bi) {
         Mat mat = new Mat(bi.getHeight(), bi.getWidth(), CvType.CV_8UC3);
         byte[] data = ((DataBufferByte) bi.getRaster().getDataBuffer()).getData();
@@ -61,5 +70,9 @@ class MiscUtils {
         final byte[] targetPixels = ((DataBufferByte) image.getRaster().getDataBuffer()).getData();
         System.arraycopy(b, 0, targetPixels, 0, b.length);
         return image;
+    }
+
+    static File dataFile(String name) {
+        return new File(System.getProperty("user.dir") + "/data/" + name);
     }
 }
