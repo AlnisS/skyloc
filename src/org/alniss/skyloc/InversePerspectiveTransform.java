@@ -6,13 +6,14 @@ import org.opencv.imgproc.Imgproc;
 
 import java.util.*;
 
-import static org.alniss.skyloc.MiscUtils.dataFile;
-import static org.alniss.skyloc.MiscUtils.loadMat;
+import static org.alniss.skyloc.MiscUtils.*;
 import static org.opencv.imgproc.Imgproc.*;
 
 public class InversePerspectiveTransform {
 
     static { System.loadLibrary(Core.NATIVE_LIBRARY_NAME); }
+
+    static double stoneX, stoneY;
 
     static Mat bookTransform() {
         Mat im_src = loadMat(dataFile("book2.jpg"));
@@ -111,15 +112,31 @@ public class InversePerspectiveTransform {
         }
         Collections.sort(thetaDiffs);
         for (Double thetaDiff : thetaDiffs) {
-            System.out.println("thetaDiff: " + thetaDiff + " theta: " + linesMap.get(thetaDiff).val[0] + " rho: " + linesMap.get(thetaDiff).val[1]);
+//            System.out.println("thetaDiff: " + thetaDiff + " theta: " + linesMap.get(thetaDiff).val[0] + " rho: " + linesMap.get(thetaDiff).val[1]);
         }
 
         double thetaDiff = thetaDiffs.get(0);
         double theta = linesMap.get(thetaDiff).val[0];
         double rho = linesMap.get(thetaDiff).val[1];
-        System.out.println("the theta: " + theta + " the rho: " + rho);
-        drawLine(cdst, theta, rho);
-//        drawLine(cdst, 0, 100);
+//        System.out.println("the theta: " + theta + " the rho: " + rho);
+//        drawLine(cdst, theta, rho);
+
+        List<Double> hitpoints = new ArrayList<>();
+        for (int i = -1; i <= 1; i++) {
+            Mat rowOfInterest = frame.row((int) Math.round(rho + i));
+            for (int j = 0; j < rowOfInterest.cols(); j++) {
+                if (rowOfInterest.get(0, j)[0] > 0)
+                    hitpoints.add((double) j);
+            }
+        }
+
+        stoneX = median(hitpoints);
+        stoneY = rho;
+
+        System.out.println("stoneX: " + stoneX + " stoneY: " + stoneY);
+
+        drawLine(cdst, 0, stoneX);
+        drawLine(cdst, Math.PI * .5, stoneY);
 
         return cdst;
     }

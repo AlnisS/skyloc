@@ -9,6 +9,7 @@ import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
 import java.io.File;
 import java.io.IOException;
+import java.util.Collections;
 
 class MiscUtils {
     static Mat loadMat(File file) {
@@ -74,5 +75,15 @@ class MiscUtils {
 
     static File dataFile(String name) {
         return new File(System.getProperty("user.dir") + "/data/" + name);
+    }
+
+    static double median(java.util.List list) {
+        Collections.sort(list);
+        double median;
+        if (list.size() % 2 == 0)
+            median = ((double) list.get(list.size() / 2) + (double) list.get(list.size() / 2 - 1)) / 2;
+        else
+            median = (double) list.get(list.size() / 2);
+        return median;
     }
 }

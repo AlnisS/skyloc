@@ -4,9 +4,8 @@
     <list default="true" id="26828ffa-c594-4238-b717-b03bee491bf5" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data/first_field_test.png" beforeDir="false" afterPath="$PROJECT_DIR$/data/first_field_test.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/stone-cv.blend" beforeDir="false" afterPath="$PROJECT_DIR$/data/stone-cv.blend" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/stone-cv.blend1" beforeDir="false" afterPath="$PROJECT_DIR$/data/stone-cv.blend1" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/org/alniss/skyloc/InversePerspectiveTransform.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/alniss/skyloc/InversePerspectiveTransform.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/alniss/skyloc/MiscUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/alniss/skyloc/MiscUtils.java" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
