@@ -95,8 +95,13 @@ public class StoneWranglerUtils {
 
     static void saveMat(Mat mat, String formatName, String fileName) {
         try {
+            File out = dataFile(fileName);
+            if (!out.exists()) {
+                System.out.println("created: " + out.toString());
+                out.createNewFile();
+            }
             ImageIO.write(imageToBufferedImage(matToImage(mat)),
-                    formatName, dataFile(fileName));
+                    formatName, out);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -163,5 +168,18 @@ public class StoneWranglerUtils {
                     result.add(new Scalar(Math.round(x), Math.round(y)));
         }
         return result;
+    }
+
+    static String padLeftZeros(String inputString, int length) {
+        if (inputString.length() >= length) {
+            return inputString;
+        }
+        StringBuilder sb = new StringBuilder();
+        while (sb.length() < length - inputString.length()) {
+            sb.append('0');
+        }
+        sb.append(inputString);
+
+        return sb.toString();
     }
 }
