@@ -27,6 +27,7 @@ class StoneWrangler {
     Mat getCurrentBirdsEyeView() { return currentBirdsEyeView; }
 
     void analyze(Mat src_) {
+        long startMillis = System.currentTimeMillis();
         Mat src = new Mat();
         Core.flip(src_, src, 0);
         Mat transformed = inversePerspectiveTransform(src);
@@ -44,6 +45,7 @@ class StoneWrangler {
         stoneWorldX = stonePixelX * StoneWranglerConstants.PIXEL_SIZE - StoneWranglerConstants.AREA_X_DIMENSION / 2;
         stoneWorldY = StoneWranglerConstants.AREA_Y_DIMENSION - stonePixelY * StoneWranglerConstants.PIXEL_SIZE;
         reportStonePosition(currentBirdsEyeView);
+        System.out.println("ran in " + (System.currentTimeMillis() - startMillis) + " millis");
     }
 
     Mat inversePerspectiveTransform(Mat src) {
