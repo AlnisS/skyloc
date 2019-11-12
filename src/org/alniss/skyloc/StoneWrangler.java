@@ -13,7 +13,7 @@ class StoneWrangler {
     private MatOfPoint2f calibrationWorldPoints;
     private Mat homography;
 
-    private double stonePixelX, stonePixelY, stoneWorldX, stoneWorldY;
+    private double stonePixelX, stonePixelY, stoneWorldX, stoneWorldY, stoneTheta, stoneRho;
     private Mat currentBirdsEyeView;
 
     StoneWrangler() {
@@ -37,9 +37,10 @@ class StoneWrangler {
 //        currentBirdsEyeView = edges;
         Mat houghLines = houghLines(edges);
         List<Scalar> lines = StoneWranglerUtils.houghLinesMatToList(houghLines);
-        Scalar result = concludeStonePosition(lines, edges);
-//        for (Scalar s : lines)
-//            StoneWranglerUtils.drawLine(currentBirdsEyeView, s.val[0], s.val[1], StoneWranglerConstants.RED_SCALAR, 1);
+        Scalar result = concludeStonePosition(lines, filtered);
+        for (Scalar s : lines)
+            StoneWranglerUtils.drawLine(currentBirdsEyeView, s.val[0], s.val[1], StoneWranglerConstants.RED_SCALAR, 1);
+        StoneWranglerUtils.drawLine(currentBirdsEyeView, stoneTheta, stoneRho, StoneWranglerConstants.BLUE_SCALAR, 1);
         stonePixelX = result.val[0];
         stonePixelY = result.val[1];
         stoneWorldX = stonePixelX * StoneWranglerConstants.PIXEL_SIZE - StoneWranglerConstants.AREA_X_DIMENSION / 2;
@@ -98,6 +99,8 @@ class StoneWrangler {
         double thetaDiff = thetaDiffs.get(0);
         double theta     = linesMap.get(thetaDiff).val[0];
         double rho       = linesMap.get(thetaDiff).val[1];
+        stoneTheta = theta;
+        stoneRho = rho;
         List<Double>
                 xvals = new ArrayList<>(),
                 yvals = new ArrayList<>();
@@ -117,7 +120,7 @@ class StoneWrangler {
 
     void reportStonePosition(Mat dst) {
         System.out.println("stone world X: " + stoneWorldX + " stone world Y: " + stoneWorldY);
-        StoneWranglerUtils.drawLine(dst, 0, stonePixelX, StoneWranglerConstants.RED_SCALAR, 1);
-        StoneWranglerUtils.drawLine(dst, Math.PI * .5, stonePixelY, StoneWranglerConstants.RED_SCALAR, 1);
+        StoneWranglerUtils.drawLine(dst, 0, stonePixelX, StoneWranglerConstants.GREEN_SCALAR, 1);
+        StoneWranglerUtils.drawLine(dst, Math.PI * .5, stonePixelY, StoneWranglerConstants.GREEN_SCALAR, 1);
     }
 }

@@ -37,7 +37,7 @@ class StoneWranglerConstants {
             HOUGH_LINES_RHO_STEP = 1,
             HOUGH_LINES_THETA_STEP = Math.PI / 180;
     static int
-            HOUGH_LINES_THRESHHOLD = 20;
+            HOUGH_LINES_THRESHHOLD = 10;
     static Scalar
             RED_SCALAR   = new Scalar(0, 0, 255),
             GREEN_SCALAR = new Scalar(0, 255, 0),
