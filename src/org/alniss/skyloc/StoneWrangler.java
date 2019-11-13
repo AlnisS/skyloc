@@ -109,6 +109,7 @@ class StoneWrangler {
             double thetaDiff = Math.pow(s.val[0] - Math.PI / 2, 2);
             thetaDiffs.add(thetaDiff);
             linesMap.put(thetaDiff, s);
+            StoneWranglerUtils.drawLine(currentBirdsEyeView, s.val[0], s.val[1], StoneWranglerConstants.RED_SCALAR, 1);
 //            StoneWranglerUtils.drawLine(currentBirdsEyeView, s.val[0], s.val[1], StoneWranglerConstants.RED_SCALAR, 1);
         }
         Collections.sort(thetaDiffs);
@@ -135,6 +136,8 @@ class StoneWrangler {
 //                currentCandidate = line;
 //                bestY = y;
 //            }
+            if (Math.abs(candidateLines.get(i).val[1]) > Math.abs(currentCandidate.val[1]))
+                currentCandidate = candidateLines.get(i);
         }
 
 //        double thetaDiff = thetaDiffs.get(0);
