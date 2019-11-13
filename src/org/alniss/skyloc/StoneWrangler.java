@@ -32,22 +32,31 @@ class StoneWrangler {
         Core.flip(src_, src, 0);
         Mat transformed = inversePerspectiveTransform(src);
         currentBirdsEyeView = transformed;
+        Mat superCoolMat = new Mat(transformed.size(), CvType.CV_8UC3, new Scalar(0, 0, 0));
+
         Mat filtered = filterForStone(transformed);
         Mat edges = cannyEdgeDetection(filtered);
 //        currentBirdsEyeView = edges;
         Mat houghLines = houghLines(edges);
         List<Scalar> lines = StoneWranglerUtils.houghLinesMatToList(houghLines);
-        Scalar result = concludeStonePosition(lines, filtered);
+        Scalar result = concludeStonePosition(lines, filtered, superCoolMat);
 //        for (Scalar s : lines)
 //            StoneWranglerUtils.drawLine(currentBirdsEyeView, s.val[0], s.val[1], StoneWranglerConstants.RED_SCALAR, 1);
-        StoneWranglerUtils.drawLine(currentBirdsEyeView, stoneTheta, stoneRho, StoneWranglerConstants.BLUE_SCALAR, 1);
+        StoneWranglerUtils.drawLine(superCoolMat, stoneTheta, stoneRho, StoneWranglerConstants.BLUE_SCALAR, 1);
         if (result != null) {
             stonePixelX = result.val[0];
             stonePixelY = result.val[1];
             stoneWorldX = stonePixelX * StoneWranglerConstants.PIXEL_SIZE - StoneWranglerConstants.AREA_X_DIMENSION / 2;
             stoneWorldY = StoneWranglerConstants.AREA_Y_DIMENSION - stonePixelY * StoneWranglerConstants.PIXEL_SIZE;
         }
-        reportStonePosition(currentBirdsEyeView);
+        reportStonePosition(superCoolMat);
+        Mat oppositeHomography = Calib3d.findHomography(calibrationWorldPoints, calibrationFramePoints);
+        Mat projected = new Mat(src.size(), CvType.CV_8UC3);
+        Imgproc.warpPerspective(superCoolMat, projected, oppositeHomography, projected.size());
+        currentBirdsEyeView = new Mat(projected.size(), CvType.CV_8UC3);
+        Core.add(src, projected, currentBirdsEyeView);
+        Core.flip(currentBirdsEyeView, currentBirdsEyeView, 0);
+//        currentBirdsEyeView = superCoolMat;
         System.out.println("ran in " + (System.currentTimeMillis() - startMillis) + " millis");
     }
 
@@ -89,7 +98,7 @@ class StoneWrangler {
         return lines;
     }
 
-    Scalar concludeStonePosition(List<Scalar> lines, Mat edges) {
+    Scalar concludeStonePosition(List<Scalar> lines, Mat edges, Mat draw) {
 
         List<List<Scalar>> bins = StoneWranglerUtils.binLines(lines);
         List<Scalar> binMedians = new ArrayList<>();
@@ -136,7 +145,7 @@ class StoneWrangler {
 
         for (Scalar s : binMedians) {
             double thetaDiff = Math.pow(s.val[0] - Math.PI / 2, 2);
-//            StoneWranglerUtils.drawLine(currentBirdsEyeView, s.val[0], s.val[1], StoneWranglerConstants.RED_SCALAR, 1);
+//            StoneWranglerUtils.drawLine(draw, s.val[0], s.val[1], StoneWranglerConstants.RED_SCALAR, 1);
 //            double y = StoneWranglerUtils.findLineCenter(edges, s.val[0], s.val[1]).val[1];
             if (thetaDiff < (Math.PI * 45) / 180)
                 candidateLines.add(s);
