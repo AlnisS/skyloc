@@ -57,6 +57,30 @@ class StoneWrangler {
         Core.add(src, projected, currentBirdsEyeView);
         Core.flip(currentBirdsEyeView, currentBirdsEyeView, 0);
 //        currentBirdsEyeView = superCoolMat;
+        Imgproc.putText(
+                currentBirdsEyeView,
+                "Stone orientation (radians): " + (stoneTheta - Math.PI / 2),
+                new Point(10, 50),
+                Core.FONT_HERSHEY_SIMPLEX,
+                1,
+                StoneWranglerConstants.GREEN_SCALAR,
+                4);
+        Imgproc.putText(
+                currentBirdsEyeView,
+                "Stone X position (inches): " + (Math.round(stoneWorldX * 100) / 100.),
+                new Point(10, 100),
+                Core.FONT_HERSHEY_SIMPLEX,
+                1,
+                StoneWranglerConstants.GREEN_SCALAR,
+                4);
+        Imgproc.putText(
+                currentBirdsEyeView,
+                "Stone Y position (inches): " + (Math.round(stoneWorldY * 100) / 100.),
+                new Point(10, 150),
+                Core.FONT_HERSHEY_SIMPLEX,
+                1,
+                StoneWranglerConstants.GREEN_SCALAR,
+                4);
         System.out.println("ran in " + (System.currentTimeMillis() - startMillis) + " millis");
     }
 
