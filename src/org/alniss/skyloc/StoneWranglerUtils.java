@@ -11,6 +11,7 @@ import java.awt.image.DataBufferByte;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -181,5 +182,48 @@ public class StoneWranglerUtils {
         sb.append(inputString);
 
         return sb.toString();
+    }
+
+    static boolean closeEnough(double theta1, double rho1, double theta2, double rho2) {
+        return Math.abs(theta1 - theta2) < StoneWranglerConstants.CLOSE_ENOUGH_THETA
+                && Math.abs(rho1 - rho2) < StoneWranglerConstants.CLOSE_ENOUGH_RHO;
+    }
+
+    static List<List<Scalar>> binLines(List<Scalar> lines) {
+        List<List<Scalar>> bins = new ArrayList<>();
+        for (Scalar line : lines) {  // for every line to be sorted
+            List<Scalar> assignedBin = null;
+            for (List<Scalar> bin : bins)  // for every potential bin
+                for (Scalar compare : bin)  // for every scalar in that potential bin
+                    if (closeEnough(line.val[0], line.val[1], compare.val[0], compare.val[1])) {  // if they are close
+                        if (assignedBin == null) {  // if the line hasn't been binned yet
+                            bin.add(line);
+                            assignedBin = bin;
+                        } else {  // if the line is in a bin already
+                            assignedBin.addAll(bin);  // move everything from the examined bin to the line's bin
+                            bin.clear();
+                        }
+                        break;
+                    }
+            if (assignedBin == null)  // if a matching bin hasn't been found
+                bins.add(new ArrayList<>(Arrays.asList(line)));
+        }
+        return bins;
+    }
+
+    static Scalar findLineCenter(Mat stoneMask, double theta, double rho) {
+        List<Double>
+                xvals = new ArrayList<>(),
+                yvals = new ArrayList<>();
+        for (int i = -1; i <= 1; i++) {
+            List<Scalar> points = StoneWranglerUtils.integerPointsAlongLine(theta, rho + i, stoneMask.width(), stoneMask.height());
+            for (Scalar s : points) {
+                if (stoneMask.get((int) s.val[1], (int) s.val[0])[0] > 0) {
+                    xvals.add(s.val[0]);
+                    yvals.add(s.val[1]);
+                }
+            }
+        }
+        return new Scalar(StoneWranglerUtils.median(xvals), StoneWranglerUtils.median(yvals));
     }
 }

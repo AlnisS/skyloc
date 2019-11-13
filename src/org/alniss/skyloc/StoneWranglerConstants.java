@@ -42,6 +42,9 @@ class StoneWranglerConstants {
             RED_SCALAR   = new Scalar(0, 0, 255),
             GREEN_SCALAR = new Scalar(0, 255, 0),
             BLUE_SCALAR  = new Scalar(255, 0, 0);
+    static double
+            CLOSE_ENOUGH_THETA = Math.PI * 15 / 180,
+            CLOSE_ENOUGH_RHO = 40;
 
     static MatOfPoint2f getCalF() {
         return StoneWranglerUtils.createMatOfPoint2f(CALX1F, CALY1F, CALX2F, CALY2F, CALX3F, CALY3F, CALX4F, CALY4F);
