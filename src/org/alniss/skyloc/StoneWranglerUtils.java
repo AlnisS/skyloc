@@ -215,7 +215,7 @@ public class StoneWranglerUtils {
         List<Double>
                 xvals = new ArrayList<>(),
                 yvals = new ArrayList<>();
-        for (int i = -1; i <= 1; i++) {
+        for (int i = -2; i <= 2; i++) {
             List<Scalar> points = StoneWranglerUtils.integerPointsAlongLine(theta, rho + i, stoneMask.width(), stoneMask.height());
             for (Scalar s : points) {
                 if (stoneMask.get((int) s.val[1], (int) s.val[0])[0] > 0) {

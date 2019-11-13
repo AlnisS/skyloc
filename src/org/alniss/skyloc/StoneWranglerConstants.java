@@ -31,7 +31,7 @@ class StoneWranglerConstants {
     static Size
             GAUSSIAN_DENOISE_K = new Size(3, 3);
     static Scalar
-            STONE_HSV_LOWER = new Scalar(.04 * 179, .7 * 255, 0.1* 255),
+            STONE_HSV_LOWER = new Scalar(.09 * 179, .7 * 255, 0.1* 255),
             STONE_HSV_UPPER = new Scalar(.14 * 179, 1. * 255, 1. * 255);
     static double
             HOUGH_LINES_RHO_STEP = 1,

@@ -103,31 +103,52 @@ class StoneWrangler {
             binMedians.add(new Scalar(StoneWranglerUtils.median(thetas), StoneWranglerUtils.median(rhos)));
         }
 
-        List<Double> thetaDiffs = new ArrayList<>();
-        Map<Double, Scalar> linesMap = new HashMap<>();
-        for (Scalar s : binMedians) {
-            double thetaDiff = Math.pow(s.val[0] - Math.PI / 2, 2);
-            thetaDiffs.add(thetaDiff);
-            linesMap.put(thetaDiff, s);
-            StoneWranglerUtils.drawLine(currentBirdsEyeView, s.val[0], s.val[1], StoneWranglerConstants.RED_SCALAR, 1);
+//        List<Double> thetaDiffs = new ArrayList<>();
+//        Map<Double, Scalar> linesMap = new HashMap<>();
+//        for (Scalar s : binMedians) {
+//            double thetaDiff = Math.pow(s.val[0] - Math.PI / 2, 2);
+//            thetaDiffs.add(thetaDiff);
+//            linesMap.put(thetaDiff, s);
 //            StoneWranglerUtils.drawLine(currentBirdsEyeView, s.val[0], s.val[1], StoneWranglerConstants.RED_SCALAR, 1);
-        }
-        Collections.sort(thetaDiffs);
+////            StoneWranglerUtils.drawLine(currentBirdsEyeView, s.val[0], s.val[1], StoneWranglerConstants.RED_SCALAR, 1);
+////            System.out.println("previous: " + s);
+//        }
+//        Collections.sort(thetaDiffs);
 
         List<Scalar> candidateLines = new ArrayList<>();
 
-        for (int i = 0; i < thetaDiffs.size(); i++) {
-            double thetaDiff = thetaDiffs.get(i);
-            Scalar line = linesMap.get(thetaDiff);
-            double y = StoneWranglerUtils.findLineCenter(edges, line.val[0], line.val[1]).val[1];
-            double fudgeFactor = (StoneWranglerConstants.AREA_Y_DIMENSION / StoneWranglerConstants.PIXEL_SIZE - y) / 200;
-            if (thetaDiff < (Math.PI * 45 / 180) / (fudgeFactor))
-                candidateLines.add(line);
+//        for (Scalar s : linesMap.values())
+//            System.out.println(s);
+
+//        for (int i = 0; i < thetaDiffs.size(); i++) {
+//            System.out.println("thetaDiff: " + thetaDiffs.get(i) + " value: " + linesMap.get(thetaDiffs.get(i)));
+//        }
+
+//        for (int i = 0; i < thetaDiffs.size(); i++) {
+//            double thetaDiff = thetaDiffs.get(i);
+//            Scalar line = linesMap.get(thetaDiff);
+//            double y = StoneWranglerUtils.findLineCenter(edges, line.val[0], line.val[1]).val[1];
+//            double fudgeFactor = (StoneWranglerConstants.AREA_Y_DIMENSION / StoneWranglerConstants.PIXEL_SIZE - y) / 200;
+////            if (thetaDiff < (Math.PI * 45 / 180) / (fudgeFactor))
+//            if (thetaDiff < (Math.PI * 45 / 180))
+//                candidateLines.add(line);
+//        }
+
+        for (Scalar s : binMedians) {
+            double thetaDiff = Math.pow(s.val[0] - Math.PI / 2, 2);
+//            StoneWranglerUtils.drawLine(currentBirdsEyeView, s.val[0], s.val[1], StoneWranglerConstants.RED_SCALAR, 1);
+//            double y = StoneWranglerUtils.findLineCenter(edges, s.val[0], s.val[1]).val[1];
+            if (thetaDiff < (Math.PI * 45) / 180)
+                candidateLines.add(s);
         }
+
         if (candidateLines.size() == 0)
             return null;
         Scalar currentCandidate = candidateLines.get(0);
 //        double bestY = 0;
+//        for (int i = 0; i < candidateLines.size(); i++)
+//            System.out.println(i + "    " + candidateLines.get(i));
+
         for (int i = 1; i < candidateLines.size(); i++) {
 //            Scalar line = candidateLines.get(i);
 //            double y = StoneWranglerUtils.findLineCenter(edges, line.val[0], line.val[1]).val[1];
@@ -136,8 +157,16 @@ class StoneWrangler {
 //                currentCandidate = line;
 //                bestY = y;
 //            }
-            if (Math.abs(candidateLines.get(i).val[1]) > Math.abs(currentCandidate.val[1]))
-                currentCandidate = candidateLines.get(i);
+            Scalar proposedCandidate = candidateLines.get(i);
+            double currentY  = StoneWranglerUtils.findLineCenter(edges, currentCandidate.val[0],  currentCandidate.val[1]).val[1];
+            double proposedY = StoneWranglerUtils.findLineCenter(edges, proposedCandidate.val[0], proposedCandidate.val[1]).val[1];
+//            if (Math.abs(candidateLines.get(i).val[1]) > Math.abs(currentCandidate.val[1]))
+//                currentCandidate = candidateLines.get(i);
+            System.out.println("currY: " + currentY + " proposedY: " + proposedY);
+            System.out.println("current candidate: " + currentCandidate);
+            System.out.println("proposed candidate: " + proposedCandidate);
+            if (proposedY > currentY)
+                currentCandidate = proposedCandidate;
         }
 
 //        double thetaDiff = thetaDiffs.get(0);
@@ -167,7 +196,8 @@ class StoneWrangler {
     }
 
     void reportStonePosition(Mat dst) {
-        System.out.println("stone world X: " + stoneWorldX + " stone world Y: " + stoneWorldY);
+        System.out.println("stone world X: " + stoneWorldX);
+        System.out.println("stone world Y: " + stoneWorldY);
         StoneWranglerUtils.drawLine(dst, 0, stonePixelX, StoneWranglerConstants.GREEN_SCALAR, 1);
         StoneWranglerUtils.drawLine(dst, Math.PI * .5, stonePixelY, StoneWranglerConstants.GREEN_SCALAR, 1);
     }
