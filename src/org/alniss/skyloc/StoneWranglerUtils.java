@@ -11,16 +11,29 @@ import java.awt.image.DataBufferByte;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-public class StoneWranglerUtils {
-    static MatOfPoint2f createMatOfPoint2f(double x1, double y1, double x2, double y2, double x3, double y3, double x4, double y4) {
-        MatOfPoint2f result = new MatOfPoint2f();
-        result.fromArray(new org.opencv.core.Point(x1, y1), new org.opencv.core.Point(x2, y2),
-                new org.opencv.core.Point(x3, y3), new org.opencv.core.Point(x4, y4));
+@SuppressWarnings({"SameParameterValue", "WeakerAccess"})
+class StoneWranglerUtils {
+
+    // ------------------------------ mat cv ops ------------------------------
+
+    static Mat warpPerspective(Mat src, Size size, Mat homography) {
+        Mat projected = new Mat(size, CvType.CV_8UC3);
+        Imgproc.warpPerspective(src, projected, homography, size);
+        return projected;
+    }
+
+    static Mat add(Mat a, Mat b) {
+        Mat result = new Mat(b.size(), CvType.CV_8UC3);
+        Core.add(a, b, result);
         return result;
+    }
+
+    static Mat verticalFlip(Mat mat) {
+        Core.flip(mat, mat, 0);
+        return mat;
     }
 
     static Mat denoiseMat(Mat src) {
@@ -29,7 +42,7 @@ public class StoneWranglerUtils {
         return denoised;
     }
 
-    static Mat maskByHSVThreshhold(Mat src, Scalar lower, Scalar upper) {
+    static Mat maskByHSVThreshold(Mat src, Scalar lower, Scalar upper) {
         Mat hsvFrame = new Mat(src.rows(), src.cols(), CvType.CV_8U, new Scalar(3));
         Imgproc.cvtColor(src, hsvFrame, Imgproc.COLOR_BGR2HSV, 3);
         Mat mask = new Mat(hsvFrame.rows(), hsvFrame.cols(), CvType.CV_8U, new Scalar(3));
@@ -53,6 +66,8 @@ public class StoneWranglerUtils {
         return result;
     }
 
+    // ------------------------------ mat drawing ops ------------------------------
+
     static void drawLine(Mat dst, double theta, double rho, Scalar color, int thickness) {
         double a = Math.cos(theta);
         double b = Math.sin(theta);
@@ -62,19 +77,11 @@ public class StoneWranglerUtils {
         Imgproc.line(dst, pt1, pt2, color, thickness, Imgproc.LINE_AA, 0);
     }
 
-    static double median(List list) {
-        if (list.size() == 0)
-            return -1;
-        Collections.sort(list);
-        double median;
-        if (list.size() % 2 == 0)
-            median = ((double) list.get(list.size() / 2) + (double) list.get(list.size() / 2 - 1)) / 2;
-        else
-            median = (double) list.get(list.size() / 2);
-        return median;
+    static void addText(Mat mat, String text, double y) {
+        Imgproc.putText(mat, text, new Point(10, y), Core.FONT_HERSHEY_SIMPLEX, 1, StoneWranglerConstants.GREEN_SCALAR, 4);
     }
 
-    // -------------------- not refactored - copy paste from old version --------------------
+    // ------------------------------ image / mat IO ------------------------------
 
     static Mat loadMat(File file) {
         try {
@@ -85,21 +92,13 @@ public class StoneWranglerUtils {
         }
     }
 
-    static void saveMat(Mat mat) {
-        try {
-            ImageIO.write(imageToBufferedImage(matToImage(mat)),
-                    "png", new File(System.getProperty("user.dir") + "/data/out.png"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     static void saveMat(Mat mat, String formatName, String fileName) {
         try {
             File out = dataFile(fileName);
             if (!out.exists()) {
-                System.out.println("created: " + out.toString());
-                out.createNewFile();
+                System.out.println("creating: " + out.toString());
+                if (!out.createNewFile())
+                    System.out.println("problem creating file: " + out.toString());
             }
             ImageIO.write(imageToBufferedImage(matToImage(mat)),
                     formatName, out);
@@ -118,14 +117,13 @@ public class StoneWranglerUtils {
     static BufferedImage imageToBufferedImage(Image img) {
         if (img instanceof BufferedImage)
             return (BufferedImage) img;
-        // Create a buffered image with transparency
-        BufferedImage bimage = new BufferedImage(img.getWidth(null), img.getHeight(null),
+        BufferedImage bufferedImage =
+                new BufferedImage(img.getWidth(null), img.getHeight(null),
                 BufferedImage.TYPE_INT_ARGB);
-        // Draw the image on to the buffered image
-        Graphics2D bGr = bimage.createGraphics();
+        Graphics2D bGr = bufferedImage.createGraphics();
         bGr.drawImage(img, 0, 0, null);
         bGr.dispose();
-        return bimage;
+        return bufferedImage;
     }
 
     static Image matToImage(Mat m){
@@ -142,11 +140,7 @@ public class StoneWranglerUtils {
         return image;
     }
 
-    static File dataFile(String name) {
-        return new File(System.getProperty("user.dir") + "/data/" + name);
-    }
-
-    // -------------------- some line stuff --------------------
+    // ------------------------------ line stuff ------------------------------
 
     static List<Scalar> integerPointsAlongLine(double theta, double rho, int width, int height) {
         List<Scalar> result = new ArrayList<>();
@@ -171,23 +165,23 @@ public class StoneWranglerUtils {
         return result;
     }
 
-    static String padLeftZeros(String inputString, int length) {
-        if (inputString.length() >= length) {
-            return inputString;
+    static Scalar findLineCenter(Mat stoneMask, double theta, double rho) {
+        List<Double>
+                xValues = new ArrayList<>(),
+                yValues = new ArrayList<>();
+        for (int i = -2; i <= 2; i++) {
+            List<Scalar> points = StoneWranglerUtils.integerPointsAlongLine(theta, rho + i, stoneMask.width(), stoneMask.height());
+            for (Scalar s : points) {
+                if (stoneMask.get((int) s.val[1], (int) s.val[0])[0] > 0) {
+                    xValues.add(s.val[0]);
+                    yValues.add(s.val[1]);
+                }
+            }
         }
-        StringBuilder sb = new StringBuilder();
-        while (sb.length() < length - inputString.length()) {
-            sb.append('0');
-        }
-        sb.append(inputString);
-
-        return sb.toString();
+        return new Scalar(StoneWranglerUtils.median(xValues), StoneWranglerUtils.median(yValues));
     }
 
-    static boolean closeEnough(double theta1, double rho1, double theta2, double rho2) {
-        return Math.abs(theta1 - theta2) < StoneWranglerConstants.CLOSE_ENOUGH_THETA
-                && Math.abs(rho1 - rho2) < StoneWranglerConstants.CLOSE_ENOUGH_RHO;
-    }
+    // ------------------------------ binning system ------------------------------
 
     static List<List<Scalar>> binLines(List<Scalar> lines) {
         List<List<Scalar>> bins = new ArrayList<>();
@@ -206,24 +200,63 @@ public class StoneWranglerUtils {
                         break;
                     }
             if (assignedBin == null)  // if a matching bin hasn't been found
-                bins.add(new ArrayList<>(Arrays.asList(line)));
+                bins.add(new ArrayList<>(Collections.singletonList(line)));
         }
         return bins;
     }
 
-    static Scalar findLineCenter(Mat stoneMask, double theta, double rho) {
-        List<Double>
-                xvals = new ArrayList<>(),
-                yvals = new ArrayList<>();
-        for (int i = -2; i <= 2; i++) {
-            List<Scalar> points = StoneWranglerUtils.integerPointsAlongLine(theta, rho + i, stoneMask.width(), stoneMask.height());
-            for (Scalar s : points) {
-                if (stoneMask.get((int) s.val[1], (int) s.val[0])[0] > 0) {
-                    xvals.add(s.val[0]);
-                    yvals.add(s.val[1]);
-                }
+    static List<Scalar> binMedians(List<List<Scalar>> bins) {
+        List<Scalar> binMedians = new ArrayList<>();
+        for (List<Scalar> bin : bins) {
+            List<Double> thetas = new ArrayList<>();
+            List<Double> rhos = new ArrayList<>();
+            for (Scalar s : bin) {
+                thetas.add(s.val[0]);
+                rhos.add(s.val[1]);
             }
+            binMedians.add(new Scalar(StoneWranglerUtils.median(thetas), StoneWranglerUtils.median(rhos)));
         }
-        return new Scalar(StoneWranglerUtils.median(xvals), StoneWranglerUtils.median(yvals));
+        return binMedians;
+    }
+
+    static boolean closeEnough(double theta1, double rho1, double theta2, double rho2) {
+        return Math.abs(theta1 - theta2) < StoneWranglerConstants.CLOSE_ENOUGH_THETA
+                && Math.abs(rho1 - rho2) < StoneWranglerConstants.CLOSE_ENOUGH_RHO;
+    }
+
+    // ------------------------------ misc ------------------------------
+
+    static File dataFile(String name) {
+        return new File(System.getProperty("user.dir") + "/data/" + name);
+    }
+
+    static String padLeftZeros(String inputString, int length) {
+        if (inputString.length() >= length) {
+            return inputString;
+        }
+        StringBuilder sb = new StringBuilder();
+        while (sb.length() < length - inputString.length()) {
+            sb.append('0');
+        }
+        sb.append(inputString);
+
+        return sb.toString();
+    }
+
+    static double median(List<Double> list) {
+        if (list.size() == 0)
+            return -1;
+        Collections.sort(list);
+        if (list.size() % 2 == 0)
+            return (list.get(list.size() / 2) + list.get(list.size() / 2 - 1)) / 2;
+        else
+            return list.get(list.size() / 2);
+    }
+
+    static MatOfPoint2f createMatOfPoint2f(double x1, double y1, double x2, double y2, double x3, double y3, double x4, double y4) {
+        MatOfPoint2f result = new MatOfPoint2f();
+        result.fromArray(new org.opencv.core.Point(x1, y1), new org.opencv.core.Point(x2, y2),
+                new org.opencv.core.Point(x3, y3), new org.opencv.core.Point(x4, y4));
+        return result;
     }
 }
